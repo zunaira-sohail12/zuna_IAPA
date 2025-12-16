@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
+<style>
+
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+    .container {
+      text-align: center;
+    }
+
+    .card {
+      width: 340px;
+      height: 200px;
+      border-radius: 16px;
+      padding: 20px;
+      color: #fff;
+      background: linear-gradient(135deg, #4f46e5, #06b6d4);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      position: relative;
+      transition: opacity 0.3s ease, filter 0.3s ease;
+    }
+
+    .card.disabled {
+      opacity: 0.5;
+      filter: grayscale(100%);
+    }
+
+    .bank {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 30px;
+    }
+
+    .number {
+      font-size: 20px;
+      letter-spacing: 3px;
+      margin-bottom: 25px;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .name {
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    .expiry {
+      font-size: 14px;
+    }
+
+    /* Toggle Switch */
+    .toggle {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #22c55e;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+
+    .status {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body style="margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(90deg,rgba(173, 197, 255, 1) 22%, rgba(89, 184, 240, 1) 53%, rgba(128, 150, 237, 1) 100%); padding: 20px; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+
+<div class="container">
+  <h1>As - is </h1>
+  <h2>Card Activation</h2>
+  <h3>Activate / DeActivate</h3>
+ <!-- <label class="switch">
+  <input type="checkbox" [checked]="isChecked" (change)="onToggle($event)">
+  <span class="slider round"></span>
+</label>
+<h3>{{message}}</h3> -->
+
+
+<div class="container" >
+  <div class="page">
+    <div id="card" class="card" [class.disabled]="!isEnabled">
+      <div class="bank">My Bank</div>
+      <div class="number">{{card_no}}</div>
+      <div class="footer">
+        <div class="name">{{holder_name}}</div>
+        <div class="expiry">{{expiry_date}}</div>
+      </div>
+    </div>
+<br>
+     <div class="toggle" style="margin: 5px;">
+    <label class="switch">
+      <input
+        type="checkbox"
+        [checked]="isEnabled"
+        (change)="toggleCard()"
+      />
+      <span class="slider"></span>
+    </label>
+
+    <span class="status">
+      {{ isEnabled ? 'Enabled' : 'Disabled' }}
+    </span>
+  </div>
+  </div>
+  </div>
+
+
+
+<br>
+    <button type="button" class="btn btn-primary" style="margin:5px;" routerLink="/as-is/card-activation">Back</button>
+  <button type="button" class="btn btn-primary" style="margin:5px;" routerLink="/as-is">Finish</button>
+  </div>
+
+  <script>
+    const toggle = document.getElementById('toggleCard');
+    const card = document.getElementById('card');
+    const statusText = document.getElementById('status');
+
+    toggle.addEventListener('change', () => {
+      if (toggle.checked) {
+        card.classList.remove('disabled');
+        statusText.textContent = 'Enabled';
+      } else {
+        card.classList.add('disabled');
+        statusText.textContent = 'Disabled';
+      }
+    });
+  </script>
+</body>
+</html>

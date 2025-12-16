@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Application Form</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body style="margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(90deg,rgba(173, 197, 255, 1) 22%, rgba(89, 184, 240, 1) 53%, rgba(128, 150, 237, 1) 100%); padding: 20px; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+
+<div class="container">
+  <h2>Application Form</h2>
+
+
+    <div class="form-group">
+      <label for="usr">Id:</label>
+      <input type="text" class="form-control" id="ids" placeholder="ids" #ids>
+    </div>
+    
+    <div class="form-group">
+      <label for="usr">Name:</label>
+      <input type="text" class="form-control" id="name" placeholder="name" #name>
+    </div>
+    
+    <div class="form-group">
+      <label for="usr">Surname:</label>
+      <input type="text" class="form-control" id="surname" placeholder="surname" #surname>
+    </div>
+    
+    <div class="form-group">
+      <label for="usr">Profession:</label>
+      <input type="text" class="form-control" id="profession" placeholder="profession" #profession>
+    </div>
+    
+    <div class="form-group">
+      <label for="usr">Income:</label>
+      <input type="number" class="form-control" id="income" placeholder="income" #income>
+    </div>
+    
+    <div class="form-group">
+      <label for="usr">Dependent:</label>
+      <input type="number" class="form-control" id="dependent" placeholder="dependent" #dependent>
+    </div>
+
+     <div class="form-group">
+      <label for="rnt">Rent:</label>
+      <input type="number" class="form-control" id="rent" placeholder="rent" #rent>
+    </div>
+    
+    <div class="form-group">
+      <label for="usr">Organization:</label>
+      <input type="text" class="form-control" id="organization" placeholder="organization" #organization>
+    </div>
+
+    <button type="button" class="btn btn-outline-success" (click)="callingService(ids.value,name.value,
+    surname.value,profession.value,income.value,dependent.value,rent.value,organization.value)">Success</button>
+
+</div>
+<!-- <button type="button" class="btn btn-primary">Next</button> -->
+
+<!------------------------------------------------------------------------------->
+
+
+</body>
+</html>

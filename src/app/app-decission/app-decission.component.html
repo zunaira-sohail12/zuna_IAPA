@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body style="margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(90deg,rgba(173, 197, 255, 1) 22%, rgba(89, 184, 240, 1) 53%, rgba(128, 150, 237, 1) 100%); padding: 20px; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+<div class="container">
+  <h1>As - is </h1>
+  <h2>Decision Report</h2>
+<button type="button" class="btn btn-success" (click)="showReport()" style="margin: 5px;">Generate Decision Report</button>   
+
+<button (click)="generatePDF()" class="btn btn-success" style="margin: 5px;">Download PDF</button>
+
+<div *ngIf="isVisible" class="report-div">
+<div id="pdfContent" style="margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div style="max-width: 800px; width: 100%; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px; text-align: center;">
+            <h1 style="margin: 0; font-size: 2.2em; margin-bottom: 10px; font-weight: 600;">Credit Card Eligibility Report</h1>
+            <p style="margin: 0; font-size: 1em; opacity: 0.9;">Customer Profile & Assessment</p>
+        </div>
+
+        <div style="padding: 40px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
+                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">ID</div>
+                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{id_no}}</div>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
+                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Reference ID</div>
+                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{refId}}</div>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
+                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Name</div>
+                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{name}}</div>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
+                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Surname</div>
+                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{surname}}</div>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
+                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Profession</div>
+                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{profession}}</div>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
+                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Organization</div>
+                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{organization}}</div>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
+                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Income</div>
+                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{income}}</div>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
+                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Rent</div>
+                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{rent}}</div>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
+                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Dependents</div>
+                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{dependent}}</div>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
+                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Credit Limit</div>
+                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{credit_limit}}</div>
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 12px; text-align: center; margin-bottom: 30px; color: white;">
+                <div style="font-size: 1em; opacity: 0.9; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Credit Score</div>
+                <div style="font-size: 3.5em; font-weight: 700; margin-bottom: 15px;">{{credit_score}}</div>
+                <div style="display: inline-block; padding: 10px 25px; border-radius: 25px; font-size: 1.1em; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; background: white; color: #667eea;">PLATINUM ELIGIBLE</div>
+            </div>
+             <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 12px; text-align: center; margin-bottom: 30px; color: white;">
+                <div style="font-size: 1em; opacity: 0.9; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Card Eligible Type</div>
+                <div style="font-size: 3.5em; font-weight: 700; margin-bottom: 15px;">{{eligible_type}}</div>
+                <div style="display: inline-block; padding: 10px 25px; border-radius: 25px; font-size: 1.1em; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; background: white; color: #667eea;">PLATINUM ELIGIBLE</div>
+            </div>
+        </div>
+
+        <div style="text-align: center; padding: 20px; background: #f8f9fa; color: #6c757d; font-size: 0.9em; border-top: 1px solid #e9ecef;">
+            <p style="margin: 0;">© 2024 Credit Analysis Division | Confidential Report | Generated: <span id="reportDate"></span></p>
+        </div>
+    </div>
+  </div>
+</div>
+    <script>
+        const d = new Date();
+        document.getElementById('reportDate').textContent = d.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
+    </script>
+
+
+    <button type="button" class="btn btn-primary" style="margin:5px;" routerLink="/as-is/credit-limit">Next</button>
+    <button type="button" class="btn btn-primary" style="margin:5px;" routerLink="/as-is/internal-check">Back</button>
+  <button type="button" class="btn btn-primary" style="margin:5px;" routerLink="/as-is">End</button>
+</div>
+  </body>
+</html>

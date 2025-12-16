@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body style="margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(90deg,rgba(173, 197, 255, 1) 22%, rgba(89, 184, 240, 1) 53%, rgba(128, 150, 237, 1) 100%); padding: 20px; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+
+ <div class="container">
+    <h1>As - is </h1>
+  <h2>Card Issuance</h2>
+  <h3>Application Form</h3>
+  <h3>{{refId}}</h3>
+  <form>
+
+    <div class="form-group">
+      <label for="usr">Holder Name:</label>
+      <input type="text" class="form-control" id="holder_name" placeholder="holder_name" #holder_name>
+    </div>
+    
+    <div class="form-group">
+      <label for="usr">CVC:</label>
+      <input type="number" class="form-control" id="cvc" placeholder="cvc" #cvc>
+    </div>
+    
+    <div class="form-group">
+      <label for="usr">Expiry:</label>
+      <input type="text" class="form-control" id="expiry" placeholder="expiry" #expiry>
+    </div>
+    
+    <div class="form-group">
+      <label for="usr">Card No:</label>
+      <input type="text" class="form-control" id="card_no" placeholder="card_no" #card_no>
+    </div>
+    
+  
+    <button type="button" class="btn btn-success" (click)="callingCardIssuanceService(holder_name.value,
+    cvc.value,expiry.value,card_no.value)">Success</button>
+<h4>{{respMsg}}</h4>
+  </form>
+
+      <button type="button" class="btn btn-primary" style="margin:5px;" routerLink="/as-is/card-dispatch">Next</button>
+    <button type="button" class="btn btn-primary" style="margin:5px;" routerLink="/as-is/credit-limit">Back</button>
+  <button type="button" class="btn btn-primary" style="margin:5px;" routerLink="/as-is">End</button>
+  </div>
+</body>
+</html>

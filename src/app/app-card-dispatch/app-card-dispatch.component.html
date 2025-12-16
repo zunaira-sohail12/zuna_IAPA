@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body style="margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(90deg,rgba(173, 197, 255, 1) 22%, rgba(89, 184, 240, 1) 53%, rgba(128, 150, 237, 1) 100%); padding: 20px; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+
+<div class="container">
+  <h1>As - is </h1>
+  <h2>Card Dispatch</h2>
+  <button type="button" class="btn btn-success" (click)="printDetails()">Print Details</button>
+  <h3>Name: {{holder_name}}</h3>
+  <h3>CVC: {{cvc}}</h3>
+  <h3>Expiry: {{expiry}}</h3>
+  <h3>Card No: {{card_no}}</h3>   
+    <button type="button" class="btn btn-success" (click)="generatePin()">Generate Pin and Dispatch</button>
+
+<br>
+    <button type="button" class="btn btn-primary" style="margin:5px;" routerLink="/as-is/card-activation">Next</button>
+    <button type="button" class="btn btn-primary" style="margin:5px;" routerLink="/as-is/credit-issuance">Back</button>
+  <button type="button" class="btn btn-primary" style="margin:5px;" routerLink="/as-is">End</button>
+  </div>
+</body>
+</html>
