@@ -6,294 +6,84 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- <style>
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-}
-
-.switch input { 
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-input:checked + .slider {
-  background-color: #2196F3;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
-
-/* Rounded sliders */
-.slider.round {
-  border-radius: 34px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
-</style> -->
+    
 </head>
 <body style="margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(90deg,rgba(173, 197, 255, 1) 22%, rgba(89, 184, 240, 1) 53%, rgba(128, 150, 237, 1) 100%); padding: 20px; min-height: 100vh; align-items: center; justify-content: center;">
 
 <div class="container">
   <h1>To - be </h1>
   <h2>Application</h2>
- <form>
-    <div class="form-group">
-      <label for="usr">Id:</label>
-      <input type="text" class="form-control" id="ids" placeholder="ids" #ids>
-    </div>
-
-    <div class="form-group">
-      <label for="usr">Name:</label>
-      <input type="text" class="form-control" id="name" placeholder="name" #name>
-    </div>
-    
-    <div class="form-group">
-      <label for="usr">Surname:</label>
-      <input type="text" class="form-control" id="surname" placeholder="surname" #surnames>
-    </div>
-    
-    <div class="form-group">
-      <label for="usr">Profession:</label>
-      <input type="text" class="form-control" id="profession" placeholder="profession" #profession>
-    </div>
-    
-    <div class="form-group">
-      <label for="usr">Income:</label>
-      <input type="number" class="form-control" id="income" placeholder="income" #income>
-    </div>
-    
-    <div class="form-group">
-      <label for="usr">Dependent:</label>
-      <input type="text" class="form-control" id="dependent" placeholder="dependent" #dependent>
-    </div>
-
-     <div class="form-group">
-      <label for="rnt">Rent:</label>
-      <input type="number" class="form-control" id="rent" placeholder="rent" #rent>
-    </div>
-    
-    <div class="form-group">
-      <label for="usr">Organization:</label>
-      <input type="text" class="form-control" id="organization" placeholder="organization" #organization>
-    </div>
-    <button type="button" class="btn btn-success" (click)="callingService(ids.value,name.value,
-    surnames.value,profession.value,income.value,dependent.value,organization.value,rent.value)">Success</button>
-
-  </form>
+  <input type="file" (change)="oneExcelFileChange($event)" accept=".xlsx, .xls" />
+  <button type="button" (click)="exportFile()">Export Excel</button>
   <h3>{{saveMsg}}</h3>
   <button type="button" class="btn btn-primary" (click)="secondStep()">Next</button>
-</div>
-
-<!------------------------------------------------------------------------------->
+  </div>
 <div class="container" *ngIf="showSecond">
   <h2>Upload Files with Descriptions</h2>
 
-  <div *ngFor="let item of fileItems; let i = index" class="file-entry">
-    <input type="file" (change)="onFileChange($event, i)" />
-    <input type="text" [(ngModel)]="item.description" placeholder="Enter description" />
-    <button (click)="removeFile(i)">Remove</button>
-
-    <div *ngIf="uploadProgress[i] >= 0">
-      <progress [value]="uploadProgress[i]" max="100"></progress>
-      {{ uploadProgress[i] }}%
-    </div>
+  <div class="file-entry">
+    <table class="table table-bordered">
+      <tr>
+        <th>Request ID</th>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Profession</th>
+        <th>Income</th>
+        <th>Dependent</th>
+        <th>Rent</th>
+        <th>Organization</th>
+        <th>Internal Bank Check</th>
+        <th>Credit Score</th>
+        <th>Eligible Type</th>
+        <th>Credit Limit</th>
+        <th>Application Status</th>
+        <th>Set Limit</th>
+        <th>Card</th>
+        <th>Generate Report</th>
+      </tr>
+      <tr *ngFor="let item of approvedRequests; let i = index">
+<td>{{item.id}}</td>
+<td>{{item.name}}</td>
+<td>{{item.surname}}</td> 
+<td>{{item.profession}}</td>
+<td>{{item.income}}</td>
+<td>{{item.dependent}}</td>
+<td>{{item.rent}}</td>
+<td>{{item.organization}}</td>
+<td>{{item.internalBankCheck}}</td>
+<td>{{item.creditScore}}</td>
+<td>{{item.eligibleType}}</td>
+<td>{{item.creditLimit}}</td>
+<td>{{item.status}}</td>
+<td><input
+        type="range"
+        [min]="item.min"
+        [max]="item.max"
+        [(ngModel)]="item.creditLimitUpdate"
+        (change)="onLimitChange(item)"
+      /><p>{{item.creditLimitUpdate}}</p></td>
+      <td>
+        <button
+        [ngClass]="item.buttonClass"
+        (click)="generateCard(item)"
+      >Generate Card</button>
+      </td>
+      <td>
+        <button (click)="callingDecissionService(item)">Generate Report</button>
+      </td>
+      </tr>
+      
+    </table>
+    
   </div>
 
-  <button (click)="addFile()">Add Another File</button>
-  <button (click)="uploadAll()">Upload All</button>
   <h3>{{uploadAllMsg}}</h3>
     <button type="button" class="btn btn-primary" style="margin: 5px;" (click)="thirdStep()">Next</button>
 </div>
-<!------------------------------------------------------------------------>
+
 
 <div class="container" *ngIf="showThird">
-  <h2>Card Assessment</h2>
-  
-  <button type="button" class="btn btn-success" (click)="callingAssessmentService()">Generate Assessment Details</button>   
-<h3>Id: {{id_no}}</h3>
-<h3>Reference Id: {{referenceId}}</h3>
-<h3>Name: {{names}}</h3>
-<h3>Surname: {{surname}}</h3>
-<h3>Credit Limit: {{credit_limit}}</h3>
-<h3>Credit Score: {{credit_score}}</h3>
-<h3>Eligible Type: {{eligible_type}}</h3>
-  <button type="button" class="btn btn-success" style="margin: 5px;" (click)="callingDecissionService()">Generate Decision Report</button>   
-  <br><button type="button" class="btn btn-success" style="margin: 5px;" (click)="generatePDF()">Download Report</button>   
-  <br><button type="button" class="btn btn-primary" style="margin: 5px;" (click)="forthStep()">Next</button>
-<div *ngIf="isVisible" class="report-div">
-<div id="pdfContent" style="margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
-    <div style="max-width: 800px; width: 100%; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden;">
-        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px; text-align: center;">
-            <h1 style="margin: 0; font-size: 2.2em; margin-bottom: 10px; font-weight: 600;">Credit Card Eligibility Report</h1>
-            <p style="margin: 0; font-size: 1em; opacity: 0.9;">Customer Profile & Assessment</p>
-        </div>
-
-        <div style="padding: 40px;">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
-                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">ID</div>
-                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{id_no}}</div>
-                </div>
-
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
-                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Reference ID</div>
-                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{referenceId}}</div>
-                </div>
-
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
-                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Name</div>
-                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{names}}</div>
-                </div>
-
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
-                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Surname</div>
-                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{surname}}</div>
-                </div>
-
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
-                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Profession</div>
-                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{professionr}}</div>
-                </div>
-
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
-                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Organization</div>
-                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{organizationr}}</div>
-                </div>
-
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
-                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Income</div>
-                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{incomer}}</div>
-                </div>
-
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
-                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Rent</div>
-                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{rentr}}</div>
-                </div>
-
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
-                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Dependents</div>
-                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{dependentr}}</div>
-                </div>
-
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
-                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Credit Limit</div>
-                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{credit_limit}}</div>
-                </div>
-            </div>
-
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 12px; text-align: center; margin-bottom: 30px; color: white;">
-                <div style="font-size: 1em; opacity: 0.9; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Credit Score</div>
-                <div style="font-size: 3.5em; font-weight: 700; margin-bottom: 15px;">{{credit_score}}</div>
-                <div style="display: inline-block; padding: 10px 25px; border-radius: 25px; font-size: 1.1em; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; background: white; color: #667eea;">PLATINUM ELIGIBLE</div>
-            </div>
-             <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 12px; text-align: center; margin-bottom: 30px; color: white;">
-                <div style="font-size: 1em; opacity: 0.9; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Card Eligible Type</div>
-                <div style="font-size: 3.5em; font-weight: 700; margin-bottom: 15px;">{{eligible_type}}</div>
-                <div style="display: inline-block; padding: 10px 25px; border-radius: 25px; font-size: 1.1em; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; background: white; color: #667eea;">PLATINUM ELIGIBLE</div>
-            </div>
-        </div>
-
-        <div style="text-align: center; padding: 20px; background: #f8f9fa; color: #6c757d; font-size: 0.9em; border-top: 1px solid #e9ecef;">
-            <p style="margin: 0;">© 2024 Credit Analysis Division | Confidential Report | Generated: <span id="reportDate"></span></p>
-        </div>
-    </div>
-  </div>
-</div>
-</div>
-<!------------------------------------------------------------------------------->
-<div class="container" *ngIf="showForth">
-    <form>
-
-    <div class="form-group">
-      <label for="usr">Holder Name:</label>
-      <input type="text" class="form-control" id="holder_name" placeholder="holder_name" #holder_name>
-    </div>
-    
-    <div class="form-group">
-      <label for="usr">CVC:</label>
-      <input type="number" class="form-control" id="cvc" placeholder="cvc" #cvc>
-    </div>
-    
-    <div class="form-group">
-      <label for="usr">Expiry:</label>
-      <input type="text" class="form-control" id="expiry" placeholder="expiry" #expiry>
-    </div>
-    
-    <div class="form-group">
-      <label for="usr">Card No:</label>
-      <input type="text" class="form-control" id="card_no" placeholder="card_no" #card_no>
-    </div>
-    
-  
-    <button type="button" class="btn btn-success" (click)="callingCardIssuanceService(holder_name.value,
-    cvc.value,expiry.value,card_no.value)">Success</button>
-
-  </form>
-    <button type="button" class="btn btn-primary" (click)="fifthStep()">Next</button>
-<h3>{{cardHolderMsg}}</h3>
-</div>
-
-<!---------------------------------------------------------------------------->
-<div class="container" *ngIf="showFifth">
-  <h2>Set Credit Limit</h2>
-  <input
-    type="range"
-    id="volume"
-    min="100"
-    max="50000"
-    [(ngModel)]="limit"
-  />
-<p>Limit: {{ limit }}</p>
-  <button type="button" class="btn btn-success" (click)="callingLimitSetService()">Set Limit</button>  
-  <h3>{{responseDesc}}</h3> 
-      <button type="button" class="btn btn-primary" (click)="sixthStep()">Next</button>
-
-</div>
-
-
-<div class="container" *ngIf="showSixth">
   <h2>Card Dispatch</h2>
-  <!-- <h3>Name: {{holder_name}}</h3>
-  <h3>CVC: {{cvc}}</h3>
-  <h3>Expiry: {{expiry}}</h3>
-  <h3>Card No: {{card_no}}</h3><br>    -->
 <style>
 
 .page {
@@ -325,6 +115,7 @@ input:checked + .slider:before {
       font-weight: bold;
       margin-bottom: 30px;
     }
+    
 
     .number {
       font-size: 20px;
@@ -407,7 +198,7 @@ input:checked + .slider:before {
   </style>
   <div class="page">
     <div id="card" class="card" [class.disabled]="!isEnabled">
-      <div class="bank">My Bank</div>
+      <div class="bank">{{card_type}}</div>
       <div class="number">{{card_no}}</div>
       <div class="footer">
         <div class="name">{{holder_name}}</div>
@@ -444,14 +235,92 @@ input:checked + .slider:before {
       }
     });
   </script>
-    <!-- <div class="form-group">
-      <label for="usr">Name:</label>
-      <input type="text" class="form-control" id="name" placeholder="name" #name>
-    </div> -->
     <button type="button" class="btn btn-success" style="margin: 5px;" (click)="generatePin()">Generate Pin and Dispatch</button>
       <button type="button" class="btn btn-primary" style="margin: 5px;" (click)="seventhStep()">Finish</button>
 
 </div>
+
+<!-- Generate report start -->
+<div class="container" *ngIf="showForth">
+  <h2>Report</h2>
+  <!-- <button type="button" class="btn btn-success" style="margin: 5px;" (click)="callingDecissionService()">Generate Decision Report</button>    -->
+  <br><button type="button" class="btn btn-success" style="margin: 5px;" (click)="generatePDF()">Download Report</button>   
+<div *ngIf="isVisible" class="report-div">
+<div id="pdfContent" style="margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div style="max-width: 800px; width: 100%; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); overflow: hidden;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px; text-align: center;">
+            <h1 style="margin: 0; font-size: 2.2em; margin-bottom: 10px; font-weight: 600;">Credit Card Eligibility Report</h1>
+            <p style="margin: 0; font-size: 1em; opacity: 0.9;">Customer Profile & Assessment</p>
+        </div>
+
+        <div style="padding: 40px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
+                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">ID</div>
+                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{id_no}}</div>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
+                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Name</div>
+                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{names}}</div>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
+                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Surname</div>
+                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{surname}}</div>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
+                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Profession</div>
+                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{professionr}}</div>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
+                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Organization</div>
+                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{organizationr}}</div>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
+                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Income</div>
+                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{incomer}}</div>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
+                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Rent</div>
+                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{rentr}}</div>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
+                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Dependents</div>
+                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{dependentr}}</div>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; border-left: 4px solid #667eea; transition: all 0.3s ease;">
+                    <div style="font-size: 0.85em; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600;">Credit Limit</div>
+                    <div style="font-size: 1.3em; color: #212529; font-weight: 600;">{{credit_limit}}</div>
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 12px; text-align: center; margin-bottom: 30px; color: white;">
+                <div style="font-size: 1em; opacity: 0.9; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Credit Score</div>
+                <div style="font-size: 3.5em; font-weight: 700; margin-bottom: 15px;">{{credit_score}}</div>
+                <div style="display: inline-block; padding: 10px 25px; border-radius: 25px; font-size: 1.1em; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; background: white; color: #667eea;">PLATINUM ELIGIBLE</div>
+            </div>
+             <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 12px; text-align: center; margin-bottom: 30px; color: white;">
+                <div style="font-size: 1em; opacity: 0.9; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Card Eligible Type</div>
+                <div style="font-size: 3.5em; font-weight: 700; margin-bottom: 15px;">{{eligible_type}}</div>
+                <div style="display: inline-block; padding: 10px 25px; border-radius: 25px; font-size: 1.1em; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; background: white; color: #667eea;">PLATINUM ELIGIBLE</div>
+            </div>
+        </div>
+
+        <div style="text-align: center; padding: 20px; background: #f8f9fa; color: #6c757d; font-size: 0.9em; border-top: 1px solid #e9ecef;">
+            <p style="margin: 0;">© 2024 Credit Analysis Division | Confidential Report | Generated: <span id="reportDate"></span></p>
+        </div>
+    </div>
+  </div>
+</div>
+</div>
+<!-- Generate report end-->
 
 
 </body>

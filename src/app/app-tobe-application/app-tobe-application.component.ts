@@ -1,22 +1,47 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { Dexie, Table } from 'dexie';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+
 interface FileItem {
   file: File | null;
   description: string;
 }
+interface Customer {
+  id: any;
+  name: any;
+  surname: any;
+  profession: any;
+  income: any;
+  dependent: any;
+  organization: any;
+  rent: any;
+  internalBankCheck: any;
+  creditScore: any;
+  eligibleType: any;
+  creditLimit: any;
+  status: any;
+  min: number;
+  max: number;
+  creditLimitUpdate: any;
+}
 @Component({
-  selector: 'app-app-tobe-application',
+  selector: 'app-tobe-application',
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './app-tobe-application.component.html',
-  styleUrl: './app-tobe-application.component.css'
+  styleUrls: ['./app-tobe-application.component.css']
 })
 export class AppTobeApplicationComponent extends Dexie implements OnInit{
+data: any[] = [];
+approvedRequests: any[] = [];
+
+
 
   fileItems: FileItem[] = [{ file: null, description: '' }];
   uploadProgress: number[] = [];
@@ -45,6 +70,7 @@ eligible_type:any;
 responseDesc:any;
 limit:any;
 
+card_type: any;
 holder_name:any;
 cvc:any;
 expiry:any;
@@ -63,6 +89,104 @@ finalMsg:any;
   ngOnInit(): void {
             this.referenceId = sessionStorage.getItem("referenceId");
   }
+
+oneExcelFileChange(event: any) { 
+  const creditScore = 0;
+  const eligibleType = '';
+  const creditLimit = 0;
+  let status = '';
+  const target: DataTransfer = <DataTransfer>(event.target); 
+  
+  if (target.files.length !== 1) throw new Error('Cannot use multiple files'); 
+  const reader: FileReader = new FileReader(); 
+  reader.onload = (e: any) => { 
+    const bstr: string = e.target.result; 
+    const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' }); 
+    // Get first sheet 
+    const wsname: string = wb.SheetNames[0]; 
+    const ws: XLSX.WorkSheet = wb.Sheets[wsname]; 
+    // Convert to JSON 
+    this.data = XLSX.utils.sheet_to_json(ws, { header: 1 }); 
+ console.log(this.data); 
+this.data[0].push("InternalBankCheck","CreditScore", "EligibleType", "CreditLimit","Status");
+ for (let i = 0; i < this.data.length; i++) { 
+  let row = this.data[i]; 
+  let creditScore = this.creditScore(Number(row[4]), 
+  Number(row[6]),Number(row[5]));
+   let eligibleType = this.eligibleType(creditScore);
+   let creditLimit = this.creditLimit(creditScore);
+   if(creditLimit < 0 && eligibleType == "none" && creditScore < 0 )
+   {
+    status = "Failed";
+   }
+   else if (creditScore < 20.0 )
+   {
+    status = "Rejected";
+   }
+   else{
+    status = "Approved";
+    let Customer: Customer = {
+      id: this.data[i][0],
+      name: this.data[i][1],
+      surname: this.data[i][2],
+      profession: this.data[i][3],
+      income: this.data[i][4],
+      dependent: this.data[i][5],  
+      rent: this.data[i][6],
+      organization: this.data[i][7],
+      internalBankCheck: "Success",
+      creditScore: creditScore,
+      eligibleType: eligibleType,
+      creditLimit: creditLimit,
+      status: status,
+      min: 0,
+      max: creditLimit,
+      creditLimitUpdate: creditLimit
+    };
+    this.approvedRequests.push(Customer);
+    console.log(this.data[1]);
+    console.log(Customer);
+   }
+  this.data[i].push("Success",creditScore, eligibleType, creditLimit, status);
+  console.log("XXX: "+ this.data[1][1]);
+
+
+}
+       
+}; 
+ reader.readAsBinaryString(target.files[0]); 
+}
+
+onLimitChange(item: any) { 
+  //alert('Updated limit:'+ item);
+ } // You can emit to parent or call a service here }
+
+
+ generateCard(item: any) { 
+  this.isChecked = false
+  this.thirdStep();
+  console.log('Button clicked:', item); 
+  this.card_type = item.eligibleType;
+  this.holder_name = item.name + ' ' + item.surname;
+   this.cvc = this.getCVC;
+   this.expiry = "12/30";
+  this.card_no = this.generateCardNumber();
+     this.cardHolderMsg="Card Issued Successfully";
+  this.showForth = false;
+
+}
+exportFile() 
+{ 
+  const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(this.data); 
+  const wb: XLSX.WorkBook = XLSX.utils.book_new(); 
+  XLSX.utils.book_append_sheet(wb, ws, "UpdatedSheet"); 
+  const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' }); 
+saveAs(new Blob([wbout], { 
+  type: "application/octet-stream" 
+}), "updated.xlsx"); 
+}
+
+
  toggleCard() {
     this.isEnabled = !this.isEnabled;
   }
@@ -120,51 +244,23 @@ finalMsg:any;
     });
     this.uploadAllMsg="All Files Uploaded Successfully";
   }
-  
-  
-  
-  
-callingAssessmentService()
-  {
-     const creditScore = this.creditScore(Number(localStorage.getItem("income")), 
-Number(localStorage.getItem("rent")),Number(localStorage.getItem("dependent")));
-const eligibleType = this.eligibleType(creditScore);
-const creditLimit = this.creditLimit(creditScore);
 
-    //const obj = JSON.parse(JSON.stringify(data));
-    this.id_no = localStorage.getItem("id_no");
-    this.referenceId = localStorage.getItem("referenceId");
-    this.names = localStorage.getItem("name");
-    this.surname = localStorage.getItem("surname");
-    this.professionr = localStorage.getItem("profession");
-    this.incomer = localStorage.getItem("income");
-    this.dependentr = localStorage.getItem("dependent");
-    this.organizationr = localStorage.getItem("organization");
-    this.rentr = localStorage.getItem("rent");
-    this.credit_limit = creditLimit;
-    this.credit_score = creditScore;
-    this.eligible_type = eligibleType;
-  }
   
-  
-    callingDecissionService()
+      callingDecissionService(item: any)
   {
-//     const creditScore = this.creditScore(Number(localStorage.getItem("income")), 
-// Number(localStorage.getItem("rent")),Number(localStorage.getItem("dependent")));
-// const eligibleType = this.eligibleType(creditScore);
-// const creditLimit = this.creditLimit(creditScore);
-//     this.id_no = localStorage.getItem("id_no");
-//     this.referenceId = localStorage.getItem("referenceId");
-//     this.names = localStorage.getItem("name");
-//     this.surname = localStorage.getItem("surname");
-//     this.profession = localStorage.getItem("profession");
-//     this.income = localStorage.getItem("income");
-//     this.dependent = localStorage.getItem("dependent");
-//     this.organization = localStorage.getItem("organization");
-//     this.rent = localStorage.getItem("rent");
-//     this.credit_limit = creditLimit;
-//     this.credit_score = creditScore;
-//     this.eligible_type = eligibleType;
+    this.id_no = item.id;
+    this.names = item.name;
+    this.surname = item.surname;
+    this.professionr = item.profession;
+    this.incomer = item.income;
+    this.dependentr = item.dependent;
+    this.organizationr = item.organization;
+    this.rentr = item.rent;
+    this.credit_limit = item.creditLimit;
+    this.credit_score = item.creditScore;
+    this.eligible_type = item.eligibleType;
+this.showForth = true;
+this.showThird=false;
     this.isVisible = !this.isVisible;
   }
    generatePDF() {
@@ -195,38 +291,7 @@ const creditLimit = this.creditLimit(creditScore);
       pdf.save('credit-assesment-report.pdf');
     });
   }
-  
-    callingDownloadReportService()
-  {
-    const element = document.getElementById('pdfContent');
-    if (!element) return;
 
-    html2canvas(element).then(canvas => {
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-
-      const imgWidth = 210; // A4 width in mm
-      const pageHeight = 297; // A4 height in mm
-      const imgHeight = canvas.height * imgWidth / canvas.width;
-      let heightLeft = imgHeight;
-
-      let position = 0;
-
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
-
-      pdf.save('document.pdf');
-    });
-  }
-  
-  
     callingCardIssuanceService(holder_name:any, cvc:any,expiry_date:any,card_no: any)
   {
 
@@ -252,10 +317,24 @@ const creditLimit = this.creditLimit(creditScore);
 
 generatePin()
 {
+  this.isChecked = true;
   this.pin = Math.floor(Math.random() * 10000);
   alert("Generated Pin: " + this.pin);
   this.finalMsg="Card Dispatched Successfully with Pin: ";
 }
+getCVC(): number { 
+  return Math.floor(100 + Math.random() * 900); 
+}
+generateCardNumber(): string { 
+  let result = "";
+  for (let i = 0; i < 16; i++) 
+  { 
+    result += Math.floor(Math.random() * 10).toString(); 
+
+  } 
+  return result; 
+}
+
 secondStep()
 {
   this.showSecond = true;

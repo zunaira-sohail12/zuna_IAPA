@@ -18,15 +18,15 @@ import { AppInternalCheckComponent } from './app-internal-check/app-internal-che
     ApplicationCompComponent,
     CardActivationCompComponent,
 AppDecissionComponent,
-AppTobeApplicationComponent,
 AppCardAssesmentComponent,
+AppTobeApplicationComponent,
 AppVerificationComponent,
 AppCardDispatchComponent,
 AppCardIssuanceComponent,
 AppCreditLimitComponent,
 AppInternalCheckComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   title = 'credit-card-application-system-1';
